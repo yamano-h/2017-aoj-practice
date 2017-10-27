@@ -6,25 +6,25 @@ import java.util.Objects;
 
 import org.junit.Test;
 
+
 public class TestMain {
 	@Test
 	public void testMain() throws Exception {
 		System.out.println("AA");
-//		Main.main(null);
-		try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String line;
-           
-            while(!isEndLine(line = br.readLine())){
-            		System.out.println(line);
-            }
-            System.out.println("fin");
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+		int[] a = {1, 2, 3, 4, 5};
+		int tmp = a[1];
+		rshift(a, 2);
+		a[4] = tmp;
+		for (int i : a) {
+			System.out.println(i);
+		}
 	}
-	private static boolean isEndLine(String line) {
-		return Objects.isNull(line);
+	
+	
+	void rshift (int[] a, int n) {
+		for (int i = n; i < a.length; i++) {
+			a[i-1] = a[i];
+		}
 	}
 }
