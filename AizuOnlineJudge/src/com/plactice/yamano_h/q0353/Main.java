@@ -16,10 +16,13 @@ class Main {
 		String[] factorList = br.readLine().split(" ");
 
 		int sortCount = processSortCount(factorCount, factorList);
-		
+
 		System.out.println(sortCount);
 	}
 
+	/**
+	 * 配列と配列の要素の数を入れて、ソートしたカウント数を取得するメソッド
+	 */
 	public static int processSortCount(int factorCount, String[] factorList) {
 		String tmp = null;
 		int sortCount = 0;
@@ -31,11 +34,11 @@ class Main {
 
 				tmp = factorList[i];
 				lshift(factorList, i + 1);
-				factorList[factorCount - 1] = tmp;
+				factorList[factorCount - 1] = tmp; // 配列は0から始まるので-1する
 
 				sortCount++;
 				// ループをリセット
-				i = -1;
+				i = -1; // 次のループに入ったときに＋1されるので−１でリセット
 			}
 		}
 		return sortCount;

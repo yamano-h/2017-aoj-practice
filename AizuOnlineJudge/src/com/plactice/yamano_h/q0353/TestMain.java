@@ -1,9 +1,5 @@
 package com.plactice.yamano_h.q0353;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Objects;
-
 import org.junit.Test;
 
 

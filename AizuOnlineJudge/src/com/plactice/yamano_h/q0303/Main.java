@@ -1,9 +1,10 @@
 package com.plactice.yamano_h.q0303;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+
 
 class Main {
 	/**
@@ -11,144 +12,61 @@ class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		// 入力読み込み
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		String answer = getScore(br);
-
-		System.out.println(answer);
-	}
-
-	/**
-	 * 全てのスコアを取得するメソッド
-	 */
-	private static String getScore(BufferedReader br) {
-
-		String line;
-		String allScore = ""; // 最後に出す全てのスコア
-		int singleScore = 0; // 各イニングのスコア
-		int outCnt = 0;
-		int getEning; // イニング数
-		int thisEning = 1; // 今のイニング
-		int countOfRunner = 0; // ランナーの数
-
-		try {
-			// 最初にイニング数を取り出す
-			getEning = Integer.parseInt(br.readLine());
-
-			while (!isEndLine(line = br.readLine())) {
-
-				if (line.equals("HIT")) {
-
-					// ランナーを１増やす
-					countOfRunner += 1;
-					// 今のスコアを計算する
-					singleScore = getScore(countOfRunner, singleScore);
-					// ランナー数が正しいかチェック
-					countOfRunner = chckOfRunner(countOfRunner);
-
-				} else if (line.equals("HOMERUN")) {
-
-					// ホームランで何点入ったかを計算する
-					singleScore = getHomerunScore(countOfRunner, singleScore);
-					// ランナーを０にリセット
-					countOfRunner = 0;
-
-				} else {
-
-					// アウトなので１足す
-					outCnt++;
-				}
-
-				if (outCnt == 3) {
-
-					if (getEning == thisEning) {// 最終イニングかで分岐
-
-						// 最終行は改行がいらないので別のメソッドで全体のスコア生成
-						allScore = createLastScoreLine(singleScore, allScore);
-
-						// 最終結果取り出し
-						return allScore;
-
-					} else {
-
-						// ここまでのスコアを一時生成
-						allScore = createScoreLine(singleScore, allScore);
-
-						// アウトカウントとランナーとスコアを０,イニングは進める
-						outCnt = 0;
-						countOfRunner = 0;
-						singleScore = 0;
-						thisEning++;
-					}
-				}
+		int strongManCount = Integer.parseInt(br.readLine());
+		List<Integer> maxHoldableList = new ArrayList<Integer>();
+		List<Integer> weightList = new ArrayList<Integer>();
+		
+		for (int i = 0; i < strongManCount; i++) {
+			
+			String[] strongMan = br.readLine().split(" ");
+			maxHoldableList.add(Integer.parseInt(strongMan[0]));
+			weightList.add(Integer.parseInt(strongMan[1]));
+		}
+		
+		int cnt = 0;
+		
+		for (;;) {
+			cnt++;
+			if (cnt == 100) {
+				break;
 			}
-			return null;
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			return null;
+		}
+		
+		for (Integer integer : maxHoldableList) {
+			System.out.println(integer);
 		}
 	}
 
-	/**
-	 * 終了条件を判断する
-	 */
-	private static boolean isEndLine(String line) {
+	public static int processSortCount(int factorCount, String[] factorList) {
+		String tmp = null;
+		int sortCount = 0;
 
-		return Objects.isNull(line);
-	}
+		// i番目とi + 1番目の中身を比較するため、０〜factorCount - 1 までループ
+		for (int i = 0; i < factorCount - 1; i++) {
 
-	/**
-	 * ランナーの数が４以上にならないように調整するメソッド
-	 */
-	private static int chckOfRunner(int countOfRunner) {
+			if (Integer.parseInt(factorList[i]) > Integer.parseInt(factorList[i + 1])) {
 
-		if (countOfRunner > 3) {
-			countOfRunner = 3;
+				tmp = factorList[i];
+				lshift(factorList, i + 1);
+				factorList[factorCount - 1] = tmp;
+
+				sortCount++;
+				// ループをリセット
+				i = -1;
+			}
 		}
-		return countOfRunner;
+		return sortCount;
 	}
 
 	/**
-	 * ヒット打ったときにスコアを取り出すメソッド
+	 * 配列の指定した箇所から右の全要素を左に一つずつずらすメソッド
 	 */
-	private static int getScore(int countOfRunner, int singleScore) {
-
-		// ランナーの数が４ならスコアを１足す
-		if (countOfRunner == 4) {
-			singleScore++;
+	public static void lshift(String[] list, int n) {
+		for (int i = n; i < list.length; i++) {
+			list[i - 1] = list[i];
 		}
-		return singleScore;
-	}
-
-	/**
-	 * ホームラン打ったときにスコアを取り出すメソッド
-	 */
-	private static int getHomerunScore(int countOfRunner, int singleScore) {
-
-		// ランナーの数に１足したものを今のスコアに加える
-		singleScore += countOfRunner + 1;
-		return singleScore;
-	}
-
-	/**
-	 * イニングが終わった際にスコアを出して改行するメソッド
-	 */
-	private static String createScoreLine(int singleScore, String allScore) {
-
-		allScore += String.valueOf(singleScore) + "\n";
-
-		return allScore;
-	}
-
-	/**
-	 * ラストイニングが終わった際に改行せずにスコアを出すメソッド
-	 */
-	private static String createLastScoreLine(int singleScore, String allScore) {
-
-		allScore += String.valueOf(singleScore);
-
-		return allScore;
 	}
 }

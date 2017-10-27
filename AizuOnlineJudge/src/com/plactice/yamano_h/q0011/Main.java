@@ -55,25 +55,25 @@ class Main {
 	 */
 	public static List<String> processGoalNumberList(List<String> goalNumberList, List<List<String>> allSideLine) {
 
-		for (int startNumber = 0; startNumber < goalNumberList.size(); startNumber++) {
+		// startNumberはsideNode（横線の端）との比較用に1から始める
+		for (int startNumber = 1; startNumber < goalNumberList.size() + 1; startNumber++) {
 
-			String goalNumber = String.valueOf(startNumber + 1);
+			int goalNumber = startNumber;
 
 			for (int j = 0; j < allSideLine.size(); j++) {
 
-				String sideNode_1 = allSideLine.get(j).get(0);
-				String sideNode_2 = allSideLine.get(j).get(1);
+				int sideNode_1 = Integer.parseInt(allSideLine.get(j).get(0));
+				int sideNode_2 = Integer.parseInt(allSideLine.get(j).get(1));
 
-				if (sideNode_1.equals(goalNumber)) {
-
+				if (sideNode_1 == goalNumber) {
 					goalNumber = sideNode_2;
-				} else if (sideNode_2.equals(goalNumber)) {
-
+				} else if (sideNode_2 == goalNumber) {
 					goalNumber = sideNode_1;
 				}
 			}
 
-			goalNumberList.set(Integer.parseInt(goalNumber) - 1, String.valueOf(startNumber + 1));
+			//例えば１→３に移動したら、リストの２（3-1）番目の要素に１を入れる
+			goalNumberList.set(goalNumber - 1, String.valueOf(startNumber));
 		}
 
 		return goalNumberList;
